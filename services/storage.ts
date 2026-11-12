@@ -10,6 +10,7 @@ export const saveProjects = (projects: Project[]): void => {
   }
 };
 
+
 export const loadProjects = (): Project[] => {
   try {
     const data = localStorage.getItem(STORAGE_KEY);

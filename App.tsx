@@ -43,6 +43,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Project, Feature, LifecycleState } from './types';
 import { saveProjects, loadProjects } from './services/storage';
 import { FeatureDetailModal } from './components/FeatureDetailModal';
+import { HtmlViewer } from './components/HtmlViewer';
 
 // --- Helper Functions ---
 
@@ -312,6 +313,7 @@ export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [activeTab, setActiveTab] = useState<'PROJECTS' | 'HTML_VIEWER'>('PROJECTS');
 
   // Form State
   const [newTitle, setNewTitle] = useState('');
@@ -590,26 +592,45 @@ export default function App() {
               Dev<span className="text-blue-500">Lyfe</span>Cycle
             </h1>
           </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveTab('PROJECTS')}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === 'PROJECTS' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-400 hover:text-white'}`}
+            >
+              Projects
+            </button>
+            <button
+              onClick={() => setActiveTab('HTML_VIEWER')}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === 'HTML_VIEWER' ? 'bg-orange-600 text-white shadow-lg shadow-orange-500/20' : 'text-slate-400 hover:text-white'}`}
+            >
+              HTML Viewer
+            </button>
+          </div>
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 mr-4">
-              <button
-                onClick={handleExport}
-                className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/50 hover:bg-slate-800 border border-white/5 rounded-md transition-colors"
-                title="Export Data to JSON"
-              >
-                <Download className="w-3.5 h-3.5" />
-                Export
-              </button>
-              <label className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/50 hover:bg-slate-800 border border-white/5 rounded-md transition-colors cursor-pointer">
-                <Upload className="w-3.5 h-3.5" />
-                Import
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImport}
-                  className="hidden"
-                />
-              </label>
+              {activeTab === 'PROJECTS' && (
+                <>
+                  <button
+                    onClick={handleExport}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/50 hover:bg-slate-800 border border-white/5 rounded-md transition-colors"
+                    title="Export Data to JSON"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Export
+                  </button>
+                  <label className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-300 bg-slate-800/50 hover:bg-slate-800 border border-white/5 rounded-md transition-colors cursor-pointer">
+                    <Upload className="w-3.5 h-3.5" />
+                    Import
+                    <input
+                      type="file"
+                      accept=".json"
+                      onChange={handleImport}
+                      className="hidden"
+                    />
+                  </label>
+                </>
+              )}
             </div>
             <a
               href="https://github.com"
@@ -624,7 +645,9 @@ export default function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8">
-        {isCreating ? (
+        {activeTab === 'HTML_VIEWER' ? (
+          <HtmlViewer />
+        ) : isCreating ? (
           <div className="max-w-2xl mx-auto">
             <button
               onClick={() => setIsCreating(false)}

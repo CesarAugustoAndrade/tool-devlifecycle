@@ -40,3 +40,4 @@ export interface ProjectAnalysisResponse {
 export interface FeatureExpansionResponse {
   subtasks: { name: string; notes: string }[];
 }
+
